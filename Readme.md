@@ -10,7 +10,9 @@ build.cmd/build.sh, then run the Stub.exe in bin/Release.
 src/Stub.sln
 
 # Controls
-W,A,S,D		faster, left, slower, right
-Mouse		move camera
-Enter		start game
-ESC			quit game
+ control   | description
+--- | ---
+W,A,S,D	| faster, left, slower, right
+Mouse	| move camera
+Enter | start game
+ESC | quit game
