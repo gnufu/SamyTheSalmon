@@ -13,6 +13,7 @@ src/Stub.sln
  control   | description
 --- | ---
 W,A,S,D	| faster, left, slower, right
+Space | rush forward
 Mouse	| move camera
 Enter | start game
 ESC | quit game
