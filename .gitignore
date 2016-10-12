@@ -1,0 +1,6 @@
+/.fake
+/bin/Release
+/bin/Debug
+/packages
+/paket-files
+/src/Stub/obj

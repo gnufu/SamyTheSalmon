@@ -1,0 +1,32 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 19.07.2010 01:59:57
+
+newmtl 01___Default
+	Ns 48.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4471 0.4471 0.4471
+	Kd 0.4471 0.4471 0.4471
+	Ks 0.5580 0.5580 0.5580
+	Ke 0.0000 0.0000 0.0000
+	map_Ka pepsi_simple.jpg
+	map_Kd pepsi_simple.jpg
+	map_refl Map__1_Raytrace.tga
+
+newmtl 02___Default
+	Ns 48.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4196 0.4196 0.4196
+	Kd 0.4196 0.4196 0.4196
+	Ks 0.5580 0.5580 0.5580
+	Ke 0.0000 0.0000 0.0000
+	map_Ka Map__3_Gradient.tga
+	map_Kd Map__3_Gradient.tga
+	map_refl Map__1_Raytrace.tga

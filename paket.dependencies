@@ -1,0 +1,16 @@
+source https://api.nuget.org/v3/index.json
+source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
+
+nuget Aardvark.Base.Incremental          
+nuget Aardvark.Application.WinForms.GL   ~> 2.1.5
+nuget Aardvark.SceneGraph                ~> 2.1.5
+nuget AssimpNet                          ~> 3.3.1
+nuget FShade                             
+nuget Aardvark.Rendering.NanoVg          ~> 2.1.5
+
+group Build
+content: none
+source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
+source https://api.nuget.org/v3/index.json
+
+github vrvis/Aardvark.Fake:customPaket
