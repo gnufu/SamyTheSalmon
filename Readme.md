@@ -1,5 +1,5 @@
 # Samy the Salmon
-This game was created by Martin Mautner and Lisa Kellner during a computer graphics lecture at TU Wien. It is written in F# using the Aardvark engine from the VRVis Research Center (https://github.com/vrvis). 
+This game was created by Martin Mautner and Lisa Kellner during a computer graphics lecture at TU Wien. It is written in F# using the [Aardvark platform](https://github.com/aardvark-platform/aardvark.docs/wiki). 
 
 ![](https://github.com/gnufu/SamyTheSalmon/blob/master/bin/resources/images/SamyTheSalmon.jpg)
 
