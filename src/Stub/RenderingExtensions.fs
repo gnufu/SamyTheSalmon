@@ -4,6 +4,7 @@ open Aardvark.Base
 open Aardvark.Base.Ag
 open Aardvark.Base.Incremental
 open Aardvark.Base.Rendering
+open Aardvark.Base.Rendering.Effects
 open Aardvark.SceneGraph
 
 [<AutoOpen>]
@@ -25,7 +26,7 @@ module RenderingExtensions =
             [<Color1>]  c1 : V4d
         }
 
-        let duplicateOutput (v : DefaultSurfaces.Vertex) =
+        let duplicateOutput (v : Vertex) =
             fragment {
                 return { c0 = v.c; c1 = v.c }
             }
@@ -36,10 +37,10 @@ module RenderingExtensions =
         open Aardvark.Base.Incremental.Operators
 
         // renders to the given FBO, clearing it first
-        let renderTo' (fbo : IMod<IFramebuffer>) (task : IRenderTask) =
+        let renderTo' (fbo : IOutputMod<IFramebuffer>) (task : IRenderTask) =
 
             let runtime = task.Runtime.Value
-            let signature = task.FramebufferSignature
+            let signature = task.FramebufferSignature.Value
 
             let clearColors =
                 signature.ColorAttachments

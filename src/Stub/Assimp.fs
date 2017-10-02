@@ -125,8 +125,8 @@ module Assimp =
 
                         // convert all attributes present in the mesh
                         // Note that all conversions are performed lazily here
-                        //      meaning that attributes which are not required for rendering
-                        //      will not be converted
+                        // meaning that attributes which are not required for rendering
+                        // will not be converted
                         let attributes =
                             SymDict.ofList [
                         
@@ -138,19 +138,19 @@ module Assimp =
                                     if m.Normals.Count = m.Vertices.Count then
                                         yield DefaultSemantic.Normals, m.Normals |> mapAttribute (fun v -> V3f(v.X, v.Y, v.Z))
                                     else
-                                        yield DefaultSemantic.Normals, BufferView(Mod.constant (NullBuffer(V4f.OOOO) :> IBuffer), typeof<V4f>)
+                                        yield DefaultSemantic.Normals, BufferView(SingleValueBuffer(Mod.constant V4f.IOII), typeof<V4f>)
 
                                 if m.Tangents <> null then
                                     if m.Tangents.Count = m.Vertices.Count then
                                         yield DefaultSemantic.DiffuseColorUTangents, m.Tangents |> mapAttribute (fun v -> V3f(v.X, v.Y, v.Z))
                                     else
-                                        yield DefaultSemantic.DiffuseColorUTangents, BufferView(Mod.constant (NullBuffer(V4f.OOOO) :> IBuffer), typeof<V4f>)
+                                        yield DefaultSemantic.DiffuseColorUTangents, BufferView(SingleValueBuffer(Mod.constant V4f.IOII), typeof<V4f>)
 
                                 if m.BiTangents <> null then
                                     if m.BiTangents.Count = m.Vertices.Count then
                                         yield DefaultSemantic.DiffuseColorVTangents, m.BiTangents |> mapAttribute (fun v -> V3f(v.X, v.Y, v.Z))
                                     else
-                                        yield DefaultSemantic.DiffuseColorVTangents, BufferView(Mod.constant (NullBuffer(V4f.OOOO) :> IBuffer), typeof<V4f>)
+                                        yield DefaultSemantic.DiffuseColorVTangents, BufferView(SingleValueBuffer(Mod.constant V4f.IOII), typeof<V4f>)
                                 
                                 if m.TextureCoordinateChannelCount > 0 then
                                     let tc = m.TextureCoordinateChannels.[0]
@@ -188,7 +188,7 @@ module Assimp =
 
                             let sg =
                                 if indexArray <> null then
-                                    Sg.VertexIndexApplicator(Mod.constant (indexArray :> Array), sg) :> ISg
+                                    Sg.VertexIndexApplicator(indexArray |> BufferView.ofArray, sg) :> ISg
                                 else
                                     sg
 

@@ -5,6 +5,7 @@ open Aardvark.Application
 open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.Base.Rendering
+open Aardvark.Base.Rendering.Effects
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.Semantics
 
@@ -33,14 +34,14 @@ module Water =
     module Effect =
         open FShade
 
-        type FShade.Parameters.Uniforms.UniformScope with
+        type FShade.UniformScope with
             member x.ClipFactor : float = x?ClipFactor
 
         // makes the water flow by continously incrementing the x component of the UV coordinates of each vertex
-        let flow (offset : IMod<double>) (v : DefaultSurfaces.Vertex) =
+        let flow (offset : IMod<double>) (v : Vertex) =
 
             vertex {
-                let t = V2d(v.tc.X + !!offset, v.tc.Y)
+                let t = V2d(v.tc.X + (offset |> Mod.force), v.tc.Y)
                 return {v with tc = t }
             }
 
@@ -68,7 +69,7 @@ module Water =
                 addressV WrapMode.Wrap
             }
 
-        let fresnel (v : DefaultSurfaces.Vertex) =
+        let fresnel (v : Vertex) =
             fragment {
 
                 let eye = uniform.CameraLocation.XYZ
@@ -113,7 +114,7 @@ module Water =
             v.XYZI
 
         // applies exponential fog for under water scenery
-        let fog (v : DefaultSurfaces.Vertex) =
+        let fog (v : Vertex) =
             fragment {
 
                 // get world position
@@ -144,7 +145,7 @@ module Water =
             }
 
         // applies exponential fog for the water surface itself
-        let fogSurface (v : DefaultSurfaces.Vertex) =
+        let fogSurface (v : Vertex) =
             fragment {
 
                 // only apply if camera is below water surface
@@ -161,7 +162,7 @@ module Water =
             }
 
         // clips geometry above / below water
-        let clip (v : DefaultSurfaces.Vertex) =
+        let clip (v : Vertex) =
             fragment {
                 if v.wp.Z * uniform.ClipFactor > 0.0 then
                     discard ()

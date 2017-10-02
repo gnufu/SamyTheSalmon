@@ -4,6 +4,7 @@ open Aardvark.Application
 open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.Base.Rendering
+open Aardvark.Base.Rendering.Effects
 open Aardvark.Rendering.GL
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.Semantics
@@ -81,7 +82,7 @@ module Shadows =
                 comparison ComparisonFunction.LessOrEqual
             }
 
-        let shader (vtx : DefaultSurfaces.Vertex) =
+        let shader (vtx : Vertex) =
             fragment {
                 let lightSpace = uniform.LightViewMatrix * vtx.wp
                 let div = lightSpace.XYZ / lightSpace.W

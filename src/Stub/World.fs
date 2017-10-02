@@ -239,7 +239,7 @@ module World =
         let objects = 
             let goodies = Sg.goodies s.goodies.instances
             let obstacles = Sg.obstacles s.obstacles.instances
-            ASet.unionTwo goodies obstacles
+            ASet.union goodies obstacles
 
         // render shadows
         let shadows = renderShadows win objects s

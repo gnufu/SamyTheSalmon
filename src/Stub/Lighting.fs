@@ -5,6 +5,7 @@ open Aardvark.Application
 open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.Base.Rendering
+open Aardvark.Base.Rendering.Effects
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.Semantics
 
@@ -54,7 +55,7 @@ module Lighting =
     module Effect =
         open FShade
 
-        type FShade.Parameters.Uniforms.UniformScope with
+        type FShade.UniformScope with
             member x.MaterialAmbient : V4d                                      = x?MaterialAmbient
             member x.MaterialDiffuse : V4d                                      = x?MaterialDiffuse
             member x.MaterialSpecular : V4d                                     = x?MaterialSpecular
@@ -76,7 +77,7 @@ module Lighting =
             }
 
         // Fragment shader for pertubing the normal using a normal map
-        let normalMapping (v : DefaultSurfaces.Vertex) =
+        let normalMapping (v : Vertex) =
             fragment {
                 let N = 
                     let TBN = M33d.FromCols(v.t.Normalized, v.b.Normalized, v.n.Normalized) // tangent space -> world space
@@ -88,7 +89,7 @@ module Lighting =
             }
 
         // Phong lighting
-        let phong (v : DefaultSurfaces.Vertex) =
+        let phong (v : Vertex) =
             fragment {
 
                 // Normal and view vector
@@ -139,7 +140,7 @@ module Lighting =
             }
 
         // Phong (specular only)
-        let phongSpecular (v : DefaultSurfaces.Vertex) =
+        let phongSpecular (v : Vertex) =
             fragment {
 
                 // Normal and view vector

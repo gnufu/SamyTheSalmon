@@ -76,6 +76,6 @@ module SgFireflyExtionsions =
 
             // build sg set
             instances 
-                |> ASet.ofMod
-                |> ASet.collect'' (fun v -> v |> List.map toSg :> seq<_>)
+                |> ASet.ofModSingle
+                |> ASet.collect' (fun v -> v |> List.map toSg :> seq<_>)
                 
