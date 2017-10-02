@@ -3,17 +3,21 @@
 open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.Base.Incremental.Operators
-open Aardvark.Rendering.NanoVg
+open Aardvark.Rendering.Text
 
 module Text =
+    open Aardvark.SceneGraph
 
     // nvg for text rendering
     let private textNvg (c : IMod<string>) =
-        c
-        |> Nvg.text
-        |> Nvg.systemFont "Consolas" FontStyle.Bold
-        |> Nvg.fillColor ~~C4f.White
-        |> Nvg.fontSize ~~30.0
+        let f = Font("Consolas", FontStyle.Regular)
+        Sg.text f C4b.White c |> Sg.scale 0.08
+        
+        //c
+        //|> Nvg.text
+        //|> Nvg.systemFont "Consolas" FontStyle.Bold
+        //|> Nvg.fillColor ~~C4f.White
+        //|> Nvg.fontSize ~~30.0
 
     // feedback msg for debug keys
     let feedbackMsg (runtime : IRuntime) (size : IMod<V2i>) =
@@ -24,23 +28,24 @@ module Text =
             }
         
         let msgNvg = textNvg msg
-        let text = Nvg.ContextApplicator(runtime.GetNanoVgContext(), Mod.constant msgNvg)
+        msgNvg
+        //let text = Nvg.ContextApplicator(runtime.GetNanoVgContext(), Mod.constant msgNvg)
         
-        // gray box around msg
-        let overall = ref Box2d.Invalid
-        let rect =
-            text.LocalBoundingBox() 
-               |> Mod.map (fun bb -> 
-                    RoundedRectangle(Box2d.FromMinAndSize(bb.Min, bb.Max.X - bb.Min.X, bb.Max.Y - bb.Min.Y),0.00))
-               |> Nvg.fill
-               |> Nvg.fillColor ~~(C4f(0.0, 0.0, 0.0, 0.5))
+        //// gray box around msg
+        //let overall = ref Box2d.Invalid
+        //let rect =
+        //    text.LocalBoundingBox() 
+        //       |> Mod.map (fun bb -> 
+        //            RoundedRectangle(Box2d.FromMinAndSize(bb.Min, bb.Max.X - bb.Min.X, bb.Max.Y - bb.Min.Y),0.00))
+        //       |> Nvg.fill
+        //       |> Nvg.fillColor ~~(C4f(0.0, 0.0, 0.0, 0.5))
 
-        let sg = 
-            let size = size |> Mod.force
-            Nvg.ofList [rect; text]
-                |> Nvg.trafo ~~(M33d.Translation(V2d((double) size.X / 2.0, 10.0)))
+        //let sg = 
+        //    let size = size |> Mod.force
+        //    Nvg.ofList [rect; text]
+        //        |> Nvg.trafo ~~(M33d.Translation(V2d((double) size.X / 2.0, 10.0)))
 
-        runtime.CompileRender sg
+        //runtime.CompileRender sg
 
     // GUI for samys health
     let health (runtime : IRuntime) (state : State) =
@@ -67,23 +72,24 @@ module Text =
             }
 
         let healthInfo = textNvg health  
-        let text = Nvg.ContextApplicator(runtime.GetNanoVgContext(), Mod.constant healthInfo)
+        healthInfo
+        //let text = Nvg.ContextApplicator(runtime.GetNanoVgContext(), Mod.constant healthInfo)
 
-        // green or red box
-        let overall = ref Box2d.Invalid
-        let rect =
-            text.LocalBoundingBox() 
-               |> Mod.map (fun bb -> 
-                    RoundedRectangle(Box2d.FromMinAndSize(bb.Min, 400.0, bb.Max.Y - bb.Min.Y),0.00))
-               |> Nvg.fill
-               |> Nvg.fillColor color
-               |> Nvg.trafo trafo
+        //// green or red box
+        //let overall = ref Box2d.Invalid
+        //let rect =
+        //    text.LocalBoundingBox() 
+        //       |> Mod.map (fun bb -> 
+        //            RoundedRectangle(Box2d.FromMinAndSize(bb.Min, 400.0, bb.Max.Y - bb.Min.Y),0.00))
+        //       |> Nvg.fill
+        //       |> Nvg.fillColor color
+        //       |> Nvg.trafo trafo
  
-        let sg = 
-            Nvg.ofList [rect; text]
-                |> Nvg.trafo ~~(M33d.Translation(V2d(15.0, 10.0)))
+        //let sg = 
+        //    Nvg.ofList [rect; text]
+        //        |> Nvg.trafo ~~(M33d.Translation(V2d(15.0, 10.0)))
 
-        runtime.CompileRender sg
+        //runtime.CompileRender sg
 
     // GUI for player score
     let score (runtime : IRuntime) (state : State) =
@@ -96,26 +102,27 @@ module Text =
             }
 
         let scoreInfo = textNvg score
-        let text = Nvg.ContextApplicator(runtime.GetNanoVgContext(), Mod.constant scoreInfo)
+        scoreInfo
+        //let text = Nvg.ContextApplicator(runtime.GetNanoVgContext(), Mod.constant scoreInfo)
 
-        // gray score box
-        let overall = ref Box2d.Invalid
-        let rect =
-            text.LocalBoundingBox() 
-               |> Mod.map (fun bb -> 
-                    let mutable b = bb.EnlargedBy(V2d(0.0, 3.0))
-                    overall := b.Union(!overall)
-                    !overall
-                  ) 
-               |> Mod.map (fun b -> RoundedRectangle(b, 5.0))
-               |> Nvg.fill
-               |> Nvg.fillColor ~~(C4f(C4f.Gray80.R, C4f.Gray80.G, C4f.Gray80.B, 0.75F))
+        //// gray score box
+        //let overall = ref Box2d.Invalid
+        //let rect =
+        //    text.LocalBoundingBox() 
+        //       |> Mod.map (fun bb -> 
+        //            let mutable b = bb.EnlargedBy(V2d(0.0, 3.0))
+        //            overall := b.Union(!overall)
+        //            !overall
+        //          ) 
+        //       |> Mod.map (fun b -> RoundedRectangle(b, 5.0))
+        //       |> Nvg.fill
+        //       |> Nvg.fillColor ~~(C4f(C4f.Gray80.R, C4f.Gray80.G, C4f.Gray80.B, 0.75F))
  
-        let sg = 
-            Nvg.ofList [rect; text]
-                |> Nvg.trafo ~~(M33d.Translation(V2d(15.0, 55.0)))
+        //let sg = 
+        //    Nvg.ofList [rect; text]
+        //        |> Nvg.trafo ~~(M33d.Translation(V2d(15.0, 55.0)))
 
-        runtime.CompileRender sg
+        //runtime.CompileRender sg
 
     // player highscore for finish screen
     let highscore (runtime : IRuntime) (hs : IMod<string>) (s : IMod<V2i>) =
@@ -126,8 +133,9 @@ module Text =
                 return M33d.Translation(V2d(((double)s.X / 2.5), ((double)s.Y / 2.0)))
             }
 
-        let hs = textNvg hs |> Nvg.trafo trafo
-        runtime.CompileRender hs
+        textNvg hs
+        //let hs = textNvg hs |> Nvg.trafo trafo
+        //runtime.CompileRender hs
 
     // playername input at starting screen
     let playername (runtime : IRuntime) (pn : IModRef<string>) (s : IMod<V2i>) =
@@ -138,5 +146,7 @@ module Text =
                 return M33d.Translation(V2d((s.X / 2), (s.Y / 2)))
             }
         
-        let pn = textNvg pn |> Nvg.trafo trafo
-        runtime.CompileRender pn
+        textNvg pn
+
+        //let pn = textNvg pn |> Nvg.trafo trafo
+        //runtime.CompileRender pn

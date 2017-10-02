@@ -8,7 +8,6 @@ open Aardvark.Application.WinForms
 open Aardvark.Base
 open Aardvark.Base.Ag
 open Aardvark.Base.Incremental
-open Aardvark.Rendering.NanoVg
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.Semantics
 
@@ -29,7 +28,7 @@ module Application =
         win.WindowState <- match Config.Application.fullscreen with
                                 | true -> OpenTK.WindowState.Fullscreen
                                 | _ -> OpenTK.WindowState.Normal
-        win.CursorVisible <- false
+        win.CursorVisible <- Config.Application.cursorVisible
 
         // keep track of game state
         let mutable state = State.initial

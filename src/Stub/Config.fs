@@ -36,7 +36,8 @@ module Config =
         let stopwatch = System.Diagnostics.Stopwatch()
 
         // fullscreen switch
-        let fullscreen = true
+        let fullscreen = false
+        let cursorVisible = true        
     
         // cap for delta time 
         let deltaCap = 0.1

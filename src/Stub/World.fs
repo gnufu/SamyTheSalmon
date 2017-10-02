@@ -11,6 +11,7 @@ open Aardvark.SceneGraph
 open Aardvark.SceneGraph.Semantics
 
 module World =
+    open Aardvark.Base.Rendering.Effects
 
     // passes
     let private pass0 = Rendering.RenderPass.main
@@ -56,7 +57,7 @@ module World =
             DefaultSurfaces.trafo |> toEffect 
             Water.Effect.clip |> toEffect
             DefaultSurfaces.diffuseTexture |> toEffect
-            Lighting.Effect.phong |> toEffect 
+            SamyTheSalmon.Lighting.Effect.phong |> toEffect 
             Water.Effect.fog |> toEffect
             DefaultSurfaces.duplicateOutput |> toEffect
         ]
@@ -70,12 +71,27 @@ module World =
             DefaultSurfaces.trafo |> toEffect 
             Water.Effect.clip |> toEffect
             DefaultSurfaces.diffuseTexture |> toEffect
-            DefaultSurfaces.simpleLighting |> toEffect // our phong doesn't work :(
+            DefaultSurfaces.simpleLighting |> toEffect
+            //SamyTheSalmon.Lighting.Effect.phong |> toEffect
             Shaders.alphaTest |> toEffect
             Water.Effect.fog |> toEffect
             DefaultSurfaces.duplicateOutput |> toEffect
         ]
 
+        //let foo = r.PrepareEffect (signature, effect)
+        //let foo = 
+        //    r.PrepareEffect(signature, 
+        //        [ 
+        //            DefaultSurfaces.trafo |> toEffect 
+        //            Water.Effect.clip |> toEffect
+        //            DefaultSurfaces.diffuseTexture |> toEffect
+        //            DefaultSurfaces.simpleLighting |> toEffect
+        //            Shaders.alphaTest |> toEffect
+        //        ]) 
+
+        //let asdf = foo :> ISurface
+        //let asdfasdf = asdf |> Mod.constant
+        
         (r.PrepareEffect (signature, effect) :> ISurface) |> Mod.constant
 
     // compile shader for fireflies
@@ -134,8 +150,8 @@ module World =
                     DefaultSurfaces.trafo |> toEffect 
                     Water.Effect.clip |> toEffect
                     DefaultSurfaces.diffuseTexture |> toEffect
-                    Lighting.Effect.normalMapping |> toEffect
-                    Lighting.Effect.phong |> toEffect 
+                    SamyTheSalmon.Lighting.Effect.normalMapping |> toEffect
+                    SamyTheSalmon.Lighting.Effect.phong |> toEffect 
                     Shadows.ShadowShader.shader |> toEffect
                     Water.Effect.fog |> toEffect
                     DefaultSurfaces.duplicateOutput |> toEffect
@@ -167,11 +183,11 @@ module World =
             |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
                 Water.Effect.flow s.water.offset |> toEffect
-                Lighting.Effect.normalMapping |> toEffect
+                SamyTheSalmon.Lighting.Effect.normalMapping |> toEffect
                 DefaultSurfaces.constantColor Config.Water.color |> toEffect
                 Water.Effect.fresnel |> toEffect
                 Water.Effect.fogSurface |> toEffect
-                Lighting.Effect.phongSpecular |> toEffect 
+                SamyTheSalmon.Lighting.Effect.phongSpecular |> toEffect 
                 DefaultSurfaces.duplicateOutput |> toEffect
             ]
 

@@ -12,7 +12,7 @@ module Shaders =
     let alphaTest (vtx : Vertex) =
         let a = Config.Application.transparency  :> IMod<_>
         fragment {
-            let t = a |> Mod.force
+            let t = a.GetValue()
             if t && vtx.c.W < 0.1 then discard ()
             return vtx.c
         }

@@ -1,6 +1,6 @@
 Aardvark.Base.Incremental       
 Aardvark.Application.WinForms.GL
-Aardvark.Rendering.NanoVg
-Aardvark.SceneGraph             
+Aardvark.SceneGraph  
+Aardvark.Rendering.Text           
 Unofficial.AssimpNet                       
 FShade                          

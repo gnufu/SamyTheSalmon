@@ -41,7 +41,8 @@ module Water =
         let flow (offset : IMod<double>) (v : Vertex) =
 
             vertex {
-                let t = V2d(v.tc.X + (offset |> Mod.force), v.tc.Y)
+                let o = offset.GetValue()
+                let t = V2d(v.tc.X + o, v.tc.Y)
                 return {v with tc = t }
             }
 
@@ -70,7 +71,10 @@ module Water =
             }
 
         let fresnel (v : Vertex) =
+        
             fragment {
+
+                let lerp (a : V3d) (b : V3d) (t : double) =  a * (1.0 - t) + b * t
 
                 let eye = uniform.CameraLocation.XYZ
 
@@ -102,10 +106,11 @@ module Water =
                     (Vec.dot N V) |> max 0.0 |> schlick
      
                 // mix reflection and refraction
-                let color = Vec.lerp refr refl f
-
+                let color = lerp refr refl f
+                
                 // incorporate constant color of the water surface
-                return V4d(Vec.lerp color v.c.XYZ v.c.W, 1.0)
+                return V4d(lerp color v.c.XYZ v.c.W, 1.0)
+                
             }
 
         // color of the fog

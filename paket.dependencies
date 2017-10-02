@@ -5,12 +5,12 @@ source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
 nuget Aardvark.Base.Incremental         ~> 3.0.39
 
 nuget Aardvark.Application.WinForms.GL  ~> 3.3.9
-nuget Aardvark.Rendering.NanoVg         ~> 3.3.9
 nuget Aardvark.SceneGraph               ~> 3.3.9
+nuget Aardvark.Rendering.Text           ~> 3.3.9
 
 nuget Unofficial.AssimpNet              ~> 3.3.3
 
-nuget FShade                            ~> 3.2.10
+nuget FShade                            = 3.2.7
 
 group Build
 framework: net45
