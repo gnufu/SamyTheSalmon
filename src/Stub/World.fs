@@ -77,21 +77,7 @@ module World =
             Water.Effect.fog |> toEffect
             DefaultSurfaces.duplicateOutput |> toEffect
         ]
-
-        //let foo = r.PrepareEffect (signature, effect)
-        //let foo = 
-        //    r.PrepareEffect(signature, 
-        //        [ 
-        //            DefaultSurfaces.trafo |> toEffect 
-        //            Water.Effect.clip |> toEffect
-        //            DefaultSurfaces.diffuseTexture |> toEffect
-        //            DefaultSurfaces.simpleLighting |> toEffect
-        //            Shaders.alphaTest |> toEffect
-        //        ]) 
-
-        //let asdf = foo :> ISurface
-        //let asdfasdf = asdf |> Mod.constant
-        
+                
         (r.PrepareEffect (signature, effect) :> ISurface) |> Mod.constant
 
     // compile shader for fireflies
@@ -311,8 +297,6 @@ module World =
             let plants =
                 let shader = compilePlantsShader r (snd fboReflection) 
                 GameContent.Content.plants
-                    //|> ASet.ofList
-                    //|> Sg.cullSet mirroredFrustum
                     |> Sg.group'
                     |> Sg.surface shader
 
@@ -329,14 +313,17 @@ module World =
                 |> RenderTask.renderTo' (fst fboReflection)
                 |> RenderTask.getResult DefaultSemantic.Color0
             
+        let map = Mod.constant GameContent.Content.dUdVMap
+
         // use second attachment as refraction texture and render into first to
         // obtain the final scene       
         let finalScene =
+            
             waterSurface s
                 |> addToScene viewTrafo projTrafo s.lights
-                |> Sg.reflectionTexture reflectionTexture
-                |> Sg.refractionTexture refractionTexture
-                |> Sg.dUdVTexture (Mod.constant GameContent.Content.dUdVMap)
+                |> WaterSg.reflectionTexture reflectionTexture
+                |> WaterSg.refractionTexture refractionTexture
+                |> WaterSg.dUdVTexture map
                 |> Sg.writeBuffer DefaultSemantic.Color0
                 |> Sg.compile r (snd fboRefraction)
                 |> RenderTask.renderTo' (fst fboRefraction)

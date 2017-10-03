@@ -19,7 +19,7 @@ module WaterExtensions =
         let RefractionTexture = Sym.ofString "RefractionTexture"
         let dUdVTexture       = Sym.ofString "dUdVTexture"
 
-    module Sg =
+    module WaterSg =
         let reflectionTexture (tex : IMod<ITexture>) (sg : ISg) =
             sg |> Sg.texture DefaultSemantic.ReflectionTexture tex
 
@@ -33,6 +33,7 @@ module Water =
 
     module Effect =
         open FShade
+        open Aardvark.Base.Rendering.Effects.ThickLine
 
         type FShade.UniformScope with
             member x.ClipFactor : float = x?ClipFactor
@@ -49,35 +50,33 @@ module Water =
         let private reflectionSampler =
             sampler2d {
                 texture uniform?ReflectionTexture
-                filter Filter.MinMagMipLinear
                 addressU WrapMode.Clamp
                 addressV WrapMode.Clamp
+                filter Filter.MinMagMipLinear
             }
 
         let private refractionSampler =
             sampler2d {
                 texture uniform?RefractionTexture
-                filter Filter.MinMagMipLinear
                 addressU WrapMode.Clamp
                 addressV WrapMode.Clamp
+                filter Filter.MinMagMipLinear
             }
 
         let private dUdVSampler =
             sampler2d {
                 texture uniform?dUdVTexture
-                filter Filter.MinMagMipLinear
                 addressU WrapMode.Wrap
                 addressV WrapMode.Wrap
+                filter Filter.MinMagMipLinear
             }
 
         let fresnel (v : Vertex) =
         
             fragment {
-
-                let lerp (a : V3d) (b : V3d) (t : double) =  a * (1.0 - t) + b * t
-
+            
                 let eye = uniform.CameraLocation.XYZ
-
+                
                 // sample dUdV map for distortion
                 let dist = dUdVSampler.Sample(v.tc).XY * 2.0 - 1.0
                 let tc = (v.pos.XY / v.pos.W) * 0.5 + 0.5 + (dist * 0.025)
@@ -89,28 +88,23 @@ module Water =
                 let refr = refractionSampler.Sample(tc).XYZ
 
                 // compute fresnel term
-                let f = 
+                // rectify normal a bit
+                let sgn = if eye.Z > 0.0 then 1.0 else -1.0
+                let N = V3d (v.n.XY, v.n.Z + 10.0) * sgn |> Vec.normalize
+                let V = (eye - v.wp.XYZ) |> Vec.normalize
+                let x = (Vec.dot N V) |> max 0.0
 
-                    // schlick approximation for air - water
-                    let schlick theta =
-                        let r0 = 0.02
-                        r0 + (1.0 - r0) * (pow (1.0 - theta) 5.0)
-
-                    // rectify normal a bit
-                    let N = 
-                        let sgn = if eye.Z > 0.0 then 1.0 else -1.0
-                        V3d (v.n.XY, v.n.Z + 10.0) * sgn |> Vec.normalize
-
-                    let V = (eye - v.wp.XYZ) |> Vec.normalize
-                        
-                    (Vec.dot N V) |> max 0.0 |> schlick
-     
+                // schlick approximation for air - water
+                let r0 = 0.02
+                let f = r0 + (1.0 - r0) * (pow (1.0 - x) 5.0)
+                
                 // mix reflection and refraction
-                let color = lerp refr refl f
+                let color = refr * (1.0 - f) + refl * f
+                let c =  color * (1.0 - v.c.W) + v.c.XYZ * v.c.W
                 
                 // incorporate constant color of the water surface
-                return V4d(lerp color v.c.XYZ v.c.W, 1.0)
-                
+                let vec = V4d(c.X,c.Y,c.Z,1.0)
+                return vec
             }
 
         // color of the fog
