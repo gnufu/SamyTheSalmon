@@ -35,22 +35,16 @@ module Config =
         // stopwatch for time meassuring for player's score
         let stopwatch = System.Diagnostics.Stopwatch()
 
-        // fullscreen switch
-        let fullscreen = false
-        let cursorVisible = true        
+        // fullscreen & cursor switch
+        let fullscreen = true
+        let cursorVisible = false        
     
         // cap for delta time 
         let deltaCap = 0.1
 
         // play sound
         let playSound = true
-
-        // feedback messges
-        let feedbackMsg = "" |> Mod.init
-
-        // switch for displaying overlay statistics
-        let showOverlay = false |> Mod.init
-
+        
         // switch for wire frame
         let wireFrame = false |> Mod.init
 

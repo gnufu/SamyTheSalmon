@@ -1,25 +1,17 @@
 ﻿namespace SamyTheSalmon
 
-open System
-
 open Aardvark.Base
-open Aardvark.Base.Ag
 open Aardvark.Base.Incremental
 open Aardvark.Base.Rendering
 open Aardvark.Application
 open Aardvark.SceneGraph
-open Aardvark.SceneGraph.Semantics
 
 module World =
-    open Aardvark.Base.Rendering.Effects
 
     // passes
     let private pass0 = Rendering.RenderPass.main
     let private pass1 = Rendering.RenderPass.after "transparency" RenderPassOrder.Arbitrary pass0
-    let private pass2 = Rendering.RenderPass.after "transparencsdhsdfh" RenderPassOrder.Arbitrary pass1
-    let private pass3 = Rendering.RenderPass.after "transparencsdsdfhhsdfh" RenderPassOrder.Arbitrary pass2
-    let private pass4 = Rendering.RenderPass.after "transparencsdhsdfhsdfhsdfsdfh" RenderPassOrder.Arbitrary pass3
-
+   
     // cull modes
     let private cullBack = Mod.constant CullMode.Clockwise
     let private cullFront = Mod.constant CullMode.CounterClockwise
@@ -243,10 +235,10 @@ module World =
 
         // prepare sg for goodies and obstacles
         let objects = 
-            //let goodies = Sg.goodies s.goodies.instances
-            //let obstacles = Sg.obstacles s.obstacles.instances
-            //ASet.union goodies obstacles
-            ASet.empty
+            let goodies = Sg.goodies s.goodies.instances
+            let obstacles = Sg.obstacles s.obstacles.instances
+            ASet.union goodies obstacles
+            //ASet.empty
 
         // render shadows
         let shadows = renderShadows win objects s
@@ -279,7 +271,6 @@ module World =
                 |> Sg.cullMode cullBack
                 |> Sg.clip (Mod.constant Clip.None)
                 |> addToScene viewTrafo projTrafo s.lights
-                |> Sg.pass pass2
                 |> Sg.compile r (snd fboRefraction)
                 |> RenderTask.renderTo' (fst fboRefraction)
                 |> RenderTask.getResult DefaultSemantic.Color1
@@ -315,7 +306,6 @@ module World =
                 |> Sg.cullMode cullFront
                 |> Sg.clip clipMode
                 |> addToScene mirroredViewTrafo projTrafo s.lights
-                |> Sg.pass pass3
                 |> Sg.compile r (snd fboReflection)
                 |> RenderTask.renderTo' (fst fboReflection)
                 |> RenderTask.getResult DefaultSemantic.Color0
@@ -332,7 +322,6 @@ module World =
                 |> WaterSg.refractionTexture refractionTexture
                 |> WaterSg.dUdVTexture map
                 |> Sg.writeBuffer DefaultSemantic.Color0
-                |> Sg.pass pass4
                 |> Sg.compile r (snd fboRefraction)
                 |> RenderTask.renderTo' (fst fboRefraction)
                 |> RenderTask.getResult DefaultSemantic.Color0
@@ -340,5 +329,4 @@ module World =
         // render full screen quad and sample final result
         SomeHelpers.quad C4b.White
             |> Sg.diffuseTexture finalScene
-            |> Sg.pass pass4
             |> Sg.effect [ DefaultSurfaces.diffuseTexture |> toEffect ]
