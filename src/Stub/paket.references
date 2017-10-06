@@ -4,3 +4,4 @@ Aardvark.SceneGraph
 Aardvark.Rendering.Text           
 Unofficial.AssimpNet                       
 FShade                          
+FsPickler
