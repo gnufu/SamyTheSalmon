@@ -110,7 +110,7 @@ A:
         let compiledShader = 
             // prepares effect for specific framebuffer signature (requires runtime to have opengl context etc)
             runtime.PrepareEffect(win.FramebufferSignature, [ DefaultSurfaces.diffuseTexture |> toEffect ]) :> ISurface // upcast necessary since upcasts not implicit in f#
-        let appliedCompiledShader = Sg.surface (Mod.constant compiledShader) // apply using Sg.surface
+        let appliedCompiledShader = Sg.surface (compiledShader) // apply using Sg.surface
         ()
 
         (* but how to convert current GameContent to have runtime? one simple hack would be: 

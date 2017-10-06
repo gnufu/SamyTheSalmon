@@ -16,6 +16,9 @@ module World =
     // passes
     let private pass0 = Rendering.RenderPass.main
     let private pass1 = Rendering.RenderPass.after "transparency" RenderPassOrder.Arbitrary pass0
+    let private pass2 = Rendering.RenderPass.after "transparencsdhsdfh" RenderPassOrder.Arbitrary pass1
+    let private pass3 = Rendering.RenderPass.after "transparencsdsdfhhsdfh" RenderPassOrder.Arbitrary pass2
+    let private pass4 = Rendering.RenderPass.after "transparencsdhsdfhsdfhsdfsdfh" RenderPassOrder.Arbitrary pass3
 
     // cull modes
     let private cullBack = Mod.constant CullMode.Clockwise
@@ -62,7 +65,7 @@ module World =
             DefaultSurfaces.duplicateOutput |> toEffect
         ]
 
-        (r.PrepareEffect (signature, effect) :> ISurface) |> Mod.constant
+        (r.PrepareEffect (signature, effect) :> ISurface)
 
     // compile shader for plants
     let private compilePlantsShader (r : IRuntime) (signature : IFramebufferSignature) =
@@ -78,7 +81,7 @@ module World =
             DefaultSurfaces.duplicateOutput |> toEffect
         ]
                 
-        (r.PrepareEffect (signature, effect) :> ISurface) |> Mod.constant
+        (r.PrepareEffect (signature, effect) :> ISurface)
 
     // compile shader for fireflies
     let private compileFireflyShader (r : IRuntime) (signature : IFramebufferSignature) =
@@ -90,7 +93,7 @@ module World =
             DefaultSurfaces.duplicateOutput |> toEffect
         ]
 
-        (r.PrepareEffect (signature, effect) :> ISurface) |> Mod.constant
+        (r.PrepareEffect (signature, effect) :> ISurface)
 
     // switch for transparency on / off
     let transparency =
@@ -168,7 +171,7 @@ module World =
             |> Sg.material (Mod.constant C4d.White) (Mod.constant C4d.White) (Mod.constant C4d.White) (Mod.constant 128.0)
             |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
-                Water.Effect.flow s.water.offset |> toEffect
+                Water.Effect.flow |> toEffect
                 SamyTheSalmon.Lighting.Effect.normalMapping |> toEffect
                 DefaultSurfaces.constantColor Config.Water.color |> toEffect
                 Water.Effect.fresnel |> toEffect
@@ -176,6 +179,7 @@ module World =
                 SamyTheSalmon.Lighting.Effect.phongSpecular |> toEffect 
                 DefaultSurfaces.duplicateOutput |> toEffect
             ]
+            |> Sg.uniform ("offset") s.water.offset
 
     // helper function to apply trafos, lights, blending, etc.
     let private addToScene view proj lights sg =
@@ -239,9 +243,10 @@ module World =
 
         // prepare sg for goodies and obstacles
         let objects = 
-            let goodies = Sg.goodies s.goodies.instances
-            let obstacles = Sg.obstacles s.obstacles.instances
-            ASet.union goodies obstacles
+            //let goodies = Sg.goodies s.goodies.instances
+            //let obstacles = Sg.obstacles s.obstacles.instances
+            //ASet.union goodies obstacles
+            ASet.empty
 
         // render shadows
         let shadows = renderShadows win objects s
@@ -274,6 +279,7 @@ module World =
                 |> Sg.cullMode cullBack
                 |> Sg.clip (Mod.constant Clip.None)
                 |> addToScene viewTrafo projTrafo s.lights
+                |> Sg.pass pass2
                 |> Sg.compile r (snd fboRefraction)
                 |> RenderTask.renderTo' (fst fboRefraction)
                 |> RenderTask.getResult DefaultSemantic.Color1
@@ -309,6 +315,7 @@ module World =
                 |> Sg.cullMode cullFront
                 |> Sg.clip clipMode
                 |> addToScene mirroredViewTrafo projTrafo s.lights
+                |> Sg.pass pass3
                 |> Sg.compile r (snd fboReflection)
                 |> RenderTask.renderTo' (fst fboReflection)
                 |> RenderTask.getResult DefaultSemantic.Color0
@@ -325,6 +332,7 @@ module World =
                 |> WaterSg.refractionTexture refractionTexture
                 |> WaterSg.dUdVTexture map
                 |> Sg.writeBuffer DefaultSemantic.Color0
+                |> Sg.pass pass4
                 |> Sg.compile r (snd fboRefraction)
                 |> RenderTask.renderTo' (fst fboRefraction)
                 |> RenderTask.getResult DefaultSemantic.Color0
@@ -332,4 +340,5 @@ module World =
         // render full screen quad and sample final result
         SomeHelpers.quad C4b.White
             |> Sg.diffuseTexture finalScene
+            |> Sg.pass pass4
             |> Sg.effect [ DefaultSurfaces.diffuseTexture |> toEffect ]

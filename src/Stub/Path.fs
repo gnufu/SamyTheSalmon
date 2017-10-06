@@ -81,7 +81,7 @@ module Path =
             let! t = t
 
             // find the corresponding segment and the position within it
-            let i = ps |> Array.findIndex (fun x -> x > t)
+            let i = ps |> Array.tryFindIndex (fun x -> x > t) |> Option.defaultValue 1
             let t = (t - ps.[i - 1]) / (ps.[i] - ps.[i - 1])
 
             // interpolate between the two points of the segment
@@ -94,7 +94,8 @@ module Path =
         // finds the index of the minimum element
         let minIndex (xs : float []) =
             let min = xs |> Array.min
-            xs |> Array.findIndex ((=) min)
+            xs |> Array.tryFindIndex ((=) min)
+               |> Option.defaultValue 0
 
         // finds the parameter t of the closest point from the given point to the given line
         let closestPoint (p : V3d) (p0 : V3d, p1 : V3d) =

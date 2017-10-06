@@ -47,7 +47,7 @@ module RenderingExtensions =
                     |> Map.toList
                     |> List.map (fun (_, (s, _)) -> s, C4f.Black)
 
-            let clear = runtime.CompileClear(signature, ~~clearColors, ~~1.0)
+            let clear = runtime.CompileClear(signature, ~~[ ], ~~1.0)
 
             RenderTask.ofList [clear; task] |> RenderTask.renderTo fbo
 

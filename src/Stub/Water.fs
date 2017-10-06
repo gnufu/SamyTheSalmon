@@ -39,10 +39,10 @@ module Water =
             member x.ClipFactor : float = x?ClipFactor
 
         // makes the water flow by continously incrementing the x component of the UV coordinates of each vertex
-        let flow (offset : IMod<double>) (v : Vertex) =
+        let flow (v : Vertex) =
 
             vertex {
-                let o = offset.GetValue()
+                let o = uniform?offset
                 let t = V2d(v.tc.X + o, v.tc.Y)
                 return {v with tc = t }
             }

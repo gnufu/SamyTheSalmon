@@ -46,5 +46,5 @@ module FrustumCullingExtensions =
 
         // culls the given set of sgs for the given view frustum
         let cullSet (frustum : IMod<Trafo3d>) (set : aset<ISg>) =
-            set |> ASet.filterM (cull frustum)
+            set //|> ASet.filterM (cull frustum)
                 |> Sg.set
