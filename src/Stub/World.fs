@@ -97,6 +97,7 @@ module World =
         }
 
     // renders the shadows to a texture
+
     let private renderShadows (win : IRenderControl) (objects : aset<ISg>) (s : State) =
         
         let trafo = Shadows.lightSpaceViewProjTrafo s

@@ -8,3 +8,5 @@ http://trepaning.com
 
 81 verts
 144 polys
+
+source: https://www.turbosquid.com/FullPreview/Index.cfm/ID/255939

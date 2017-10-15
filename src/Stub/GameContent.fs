@@ -44,12 +44,6 @@ module GameContent =
         let skybox = @"terrain\skybox.3ds" |> load Assimp.load 2.5 |> Sg.trafo (Mod.constant (Trafo3d.RotationZInDegrees(270.0)))
 
         // load different obstacles
-        let bear     = @"obstacles\bear\bear.obj"               |> load Assimp.load 0.01
-        let runway   = @"obstacles\Runway\Runway-warnings.3DS"  |> load Assimp.load 0.05
-        let jug      = @"obstacles\Jug\Jug1.obj"                |> load Assimp.load 0.5
-        let pepsi    = @"obstacles\Pepsi\Pepsi_Can.obj"         |> load Assimp.load 0.004
-        let treasure = @"obstacles\treasure\treasure_chest.obj" |> load Assimp.load 0.15
-        let bb8      = @"obstacles\bb8\bb8.3DS"                 |> load Assimp.load 0.006
         let egg      = @"obstacles\egg\egg.3DS"                 |> load Assimp.load 0.0007
         let coin     = @"obstacles\coin\TyveKrone.obj"          |> load Assimp.load 0.03
         let barrel   = @"obstacles\light\Radioactive barrel.obj"|> load Assimp.load 0.02
@@ -95,7 +89,7 @@ module GameContent =
                 |> Sg.andAlso boots_2 
                 |> Sg.cullMode cullNone
 
-            [| bear; runway; jug; pepsi; treasure; boots; egg; bb8; barrel |]
+            [| boots; egg; barrel |]
                 |> Array.map (Sg.material (Mod.constant C4d.White) (Mod.constant C4d.White) (Mod.constant C4d.White) (Mod.constant 152.0))
                 //|> Array.map (Sg.loadAsync win.FramebufferSignature)
 
